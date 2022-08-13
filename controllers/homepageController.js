@@ -6,7 +6,7 @@ const {Blog, Comment, Todo, User} = require('./../models');
 
 // Router to get the landing page using try catch to handle errors
 router.get('/', (req, res) => {
-    res.render('landing_page',{
+    res.render('homepage',{
       isLoggedIn: req.session.isLoggedIn, // if the user is logged in, then we will set isLoggedIn to true
     }
     ); // page render the landing page file 
@@ -42,7 +42,26 @@ router.get('/users/:userId', async (req, res) => {
 
 
 // router to get todos from the database and render the todos page with the todos in json format
+router.get('blogs', async (req, res) => {
+    try {
+        const dbBlogsData = await Todo.findAll();
+        const todos = dbBlogsData.map(dbBlog => dbBlog.get({plain: true}));
+        res.render('blogs', {
+            blogs,
+            loggedInUser: req.session.user || null,
+            isLoggedIn: req.session.isLoggedIn,
+        });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
 // if not logged in redirect to home page
+const isLoggedIn = (req, res, next) => {
+    if (req.session.isLoggedIn) {
+        next();
+    }
+}
+
 // find all todos for the user using req.session
 
 
