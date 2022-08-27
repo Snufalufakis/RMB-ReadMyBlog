@@ -1,3 +1,3 @@
-const router = require('express').Router();
-const bcrypt = require('bcryptjs');
-const {User} = require('./../models');
+const router = require("express").Router();
+const bcrypt = require("bcryptjs");
+const { User, Blog, Comment } = require("./../models");
