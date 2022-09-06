@@ -1,4 +1,4 @@
-// dependices
+// dependencies
 const router = require("express").Router();
 const apiController = require("./apiController");
 const { Blog, Comment, User } = require("./../models");
@@ -38,7 +38,6 @@ router.get("/users/:userId", async (req, res) => {
   }
 });
 
-// router to get todos from the database and render the todos page with the todos in json format
 router.get("blogs", async (req, res) => {
   try {
     const dbBlogsData = await Blog.findAll();
