@@ -30,7 +30,7 @@ router.get("/users", async (req, res) => {
 //router to ger users id and render the user profile page
 router.get("/users/:userId", async (req, res) => {
   try {
-    const userData = await User.findByPk(req.params.userId);
+    const userData = await User.findByPk(req.params.userID);
     const user = userData.get({ plain: true });
     res.render("user_profile", { user });
   } catch (error) {
@@ -65,7 +65,7 @@ router.get("/blogs", isLoggedIn, async (req, res) => {
   try {
     const dbBlogData = await Blog.findAll({
       where: {
-        user_id: req.session.user.id,
+        userID: req.session.userID,
       },
     });
     const blogs = dbBlogData.map((blog) => blog.get({ plain: true }));
@@ -114,8 +114,8 @@ router.post("/blogs/:id", isLoggedIn, async (req, res) => {
   try {
     const dbCommentData = await Comment.create({
       comment: req.body.comment,
-      user_id: req.session.user.id,
-      blog_id: req.params.id,
+      userID: req.session.userID,
+      commentID: req.params.commentID,
     });
     res.status(200).json(dbCommentData);
   } catch (error) {

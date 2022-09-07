@@ -17,20 +17,6 @@ Comment.init(
         notNull: true,
       },
     },
-    postID: {
-      type: DataTypes.UUID,
-      references: {
-        model: "posts",
-        key: "postID",
-      },
-    },
-    userID: {
-      type: DataTypes.UUID,
-      references: {
-        model: "users",
-        key: "userID",
-      },
-    },
   },
   {
     sequelize,

@@ -21,7 +21,7 @@ Blog.init(
       type: DataTypes.UUID,
       references: {
         model: "users",
-        key: "id",
+        key: "userID",
       },
     },
   },
