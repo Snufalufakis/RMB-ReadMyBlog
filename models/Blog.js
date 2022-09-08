@@ -5,12 +5,19 @@ class Blog extends Model {}
 
 Blog.init(
   {
-    id: {
+    blogID: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    blog: {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: true,
+      },
+    },
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

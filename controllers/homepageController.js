@@ -27,8 +27,8 @@ router.get("/users", async (req, res) => {
   }
 });
 
-//router to ger users id and render the user profile page
-router.get("/users/:userId", async (req, res) => {
+//router to ger users id and render the user profile page // v2
+router.get("/users/:userID", async (req, res) => {
   try {
     const userData = await User.findByPk(req.params.userID);
     const user = userData.get({ plain: true });
