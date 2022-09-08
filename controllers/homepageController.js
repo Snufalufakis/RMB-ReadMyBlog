@@ -19,10 +19,11 @@ router.get("/users", async (req, res) => {
     const users = dbUsersData.map((dbUser) => dbUser.get({ plain: true }));
     res.render("users", {
       users,
-      loggedInUser: req.session.user || null,
       isLoggedIn: req.session.isLoggedIn,
     });
+    console.log(dbUsersData);
   } catch (error) {
+    console.log("E L:26 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
@@ -34,6 +35,7 @@ router.get("/users/:userID", async (req, res) => {
     const user = userData.get({ plain: true });
     res.render("user_profile", { user });
   } catch (error) {
+    console.log("E L:36 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
@@ -44,10 +46,10 @@ router.get("blogs", async (req, res) => {
     const blogs = dbBlogsData.map((dbBlog) => dbBlog.get({ plain: true }));
     res.render("blogs", {
       blogs,
-      loggedInUser: req.session.user || null,
       isLoggedIn: req.session.isLoggedIn,
     });
   } catch (error) {
+    console.log("E L:53 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
@@ -71,10 +73,10 @@ router.get("/blogs", isLoggedIn, async (req, res) => {
     const blogs = dbBlogData.map((blog) => blog.get({ plain: true }));
     res.render("blogs", {
       blogs,
-      loggedInUser: req.session.user || null,
       isLoggedIn: req.session.isLoggedIn,
     });
   } catch (error) {
+    console.log("E L:81 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
@@ -86,10 +88,10 @@ router.get("/blogs/:id", isLoggedIn, async (req, res) => {
     const blog = dbBlogData.get({ plain: true });
     res.render("blog", {
       blog,
-      loggedInUser: req.session.user || null,
       isLoggedIn: req.session.isLoggedIn,
     });
   } catch (error) {
+    console.log("E L:97 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
@@ -101,7 +103,6 @@ router.get("/blogs/:id/edit", isLoggedIn, async (req, res) => {
     const blog = dbBlogData.get({ plain: true });
     res.render("edit_blog", {
       blog,
-      loggedInUser: req.session.user || null,
       isLoggedIn: req.session.isLoggedIn,
     });
   } catch (error) {
@@ -119,6 +120,7 @@ router.post("/blogs/:id", isLoggedIn, async (req, res) => {
     });
     res.status(200).json(dbCommentData);
   } catch (error) {
+    console.log("E L:127 homepagecontroller", error);
     res.status(500).json(error);
   }
 });

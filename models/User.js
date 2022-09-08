@@ -11,7 +11,14 @@ User.init(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    username: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: true,
+      },
+    },
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

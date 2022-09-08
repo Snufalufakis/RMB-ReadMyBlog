@@ -5,7 +5,32 @@
     <div class="col-lg-4 col-md-12 mb-4">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{blog.title}}</h5>
+          <h5 class="card-title">{{blog.title}} Title should be here</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.{{blog.comment}}
+          </p>
+          {{#if loggedIn}}
+          <a href="#!" class="btn btn-primary">Comment</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{blog.title}}title should be here</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.{{blog.comment}}
+          </p>
+          <a href="#!" class="btn btn-primary">Read</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{blog.title}}title should be here</h5>
           <p class="card-text">
             Some quick example text to build on the card title and make up the
             bulk of the card's content.{{blog.comment}}
