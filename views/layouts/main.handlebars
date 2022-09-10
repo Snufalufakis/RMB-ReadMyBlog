@@ -27,21 +27,11 @@
         <div class="my-2 row">
           <div class="col-12 d-flex justify-content-between">
             {{#if signedIn}}
-              <button
-                id="settings-button-header"
-                class="btn btn-secondary col-auto m-1 settings"
-              ><i class="bi bi-gear"></i></button>
-            {{/if}}
-            {{#if signedIn}}
-              <button
-                id="sign-out-button-header"
-                class="btn btn-secondary col-auto m-1"
-              ><i class="bi bi-door-closed-fill"></i></button>
+              <button id="signOut" class="btn btn-secondary col-auto m-1"><i
+                  class="bi bi-door-closed-fill"
+                ></i></button>
             {{else}}
-              <button
-                id="sign-in-button-header"
-                class="btn btn-secondary col-auto m-1"
-              >Sign In</button>
+              <button id="signIn" class="btn btn-secondary col-auto m-1">Sign In</button>
               <button
                 id="sign-up-button-header"
                 class="btn btn-secondary col-auto m-1"
@@ -59,7 +49,7 @@
       crossorigin="anonymous"
     >
     </script>
-    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/app.js"></script>
   </body>
 
 </html>
