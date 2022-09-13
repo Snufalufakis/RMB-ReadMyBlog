@@ -32,8 +32,9 @@ router.get("/users", async (req, res) => {
 router.get("/users/:userID", async (req, res) => {
   try {
     const userData = await User.findByPk(req.params.userID);
+    console.log(userData);
     const user = userData.get({ plain: true });
-    res.render("user_profile", { user });
+    res.render("users", user);
   } catch (error) {
     console.log("E L:36 homepagecontroller", error);
     res.status(500).json(error);
@@ -106,21 +107,6 @@ router.get("/blogs/:id/edit", isLoggedIn, async (req, res) => {
       isLoggedIn: req.session.isLoggedIn,
     });
   } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-//Logged in users can post comments on blogs
-router.post("/blogs/:id", isLoggedIn, async (req, res) => {
-  try {
-    const dbCommentData = await Comment.create({
-      comment: req.body.comment,
-      userID: req.session.userID,
-      commentID: req.params.commentID,
-    });
-    res.status(200).json(dbCommentData);
-  } catch (error) {
-    console.log("E L:127 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
