@@ -33,7 +33,7 @@ app.set("view engine", "handlebars");
 
 // middlewares
 app.use(express.static("public"));
-app.use(session(sessionSettings)); // ascess to req.session
+app.use(session(sessionSettings)); // access to req.session
 app.use(express.json()); // body parser to get req.body in the app
 app.use(express.urlencoded({ extended: true }));
 
