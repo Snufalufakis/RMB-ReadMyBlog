@@ -31,11 +31,8 @@
                   class="bi bi-door-closed-fill"
                 ></i></button>
             {{else}}
-              <button id="signIn" class="btn btn-secondary col-auto m-1">Sign In</button>
-              <button
-                id="sign-up-button-header"
-                class="btn btn-secondary col-auto m-1"
-              >Sign Up</button>
+              <button id="signUpBtn" class="btn btn-secondary col-auto m-1">Sign
+                Up</button>
             {{/if}}
           </div>
         </div>
@@ -50,6 +47,9 @@
     >
     </script>
     <script src="/assets/js/app.js"></script>
+    {{#if logged_in}}
+      <script src="/js/logout.js"></script>
+    {{/if}}
   </body>
 
 </html>

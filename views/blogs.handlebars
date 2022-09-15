@@ -1,0 +1,18 @@
+<div class="row">
+  {{#each blogs as |blog|}}
+    <div class="col-lg-4 col-md-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{blog.title}} Title should be here</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.{{blog.description}}
+          </p>
+          {{#if loggedIn}}
+            <a href="#!" class="btn btn-primary">Comment</a>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

@@ -3,7 +3,7 @@ const router = require("express").Router();
 const { User, Blog, Comment } = require("../models");
 
 //Logged in users can post comments on blogs
-router.post("/blogs/:id", isLoggedIn, async (req, res) => {
+router.post("/blogs/:id", async (req, res) => {
   try {
     const dbCommentData = await Comment.create({
       comment: req.body.comment,
@@ -53,7 +53,7 @@ router.post("/signin", async (req, res) => {
   try {
     const existingUser = await User.findOne({
       where: {
-        email: req.body.email,
+        username: req.body.username,
       },
     });
 
@@ -81,7 +81,7 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.post("/signout", async (req, res) => {
+router.post("/signout", (req, res) => {
   if (req.session.isLoggedIn) {
     req.destroy(() => {
       res.json({ success: true });

@@ -1,19 +1,17 @@
 module.exports = [
   {
     userID: 1,
-    name: "John Doe",
-    email: "johndoe@kingmarch.com",
-    password: "johndoe",
+    username: "JohnDoe",
+    password: "password",
   },
   {
     userID: 2,
-    name: "Jane Doe",
-    email: "janedoe@kingmarch.com",
-    password: "janedoe",
+    username: "JaneDoe",
+    password: "password",
   },
   {
     userID: 3,
-    name: "John Smith",
-    email: "johnSmith@kingmarch.com",
+    username: "JohnSmith",
+    password: "password",
   },
 ];
