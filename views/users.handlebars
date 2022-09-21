@@ -1,6 +1,21 @@
 {{#if isLoggedIn}}
-  <h1>Welcome logged in user</h1>
+  <h1>Welcome logged in user: {{user.username}}</h1>
 
   <h1>Recent Blogs</h1>
-
+  <div class="activePosts justify-content-center row">
+    <div class="my-1 text-center">
+    </div>
+    {{#each blogs as |blog|}}
+      <div class="card m-3" style="width: 18rem;">
+        <div
+          class="bg-opacity-25 bg-secondary card-body rounded-pill text-break text-center"
+        >
+          <p class="card-text">
+            <a href="/blogs/{{blog.userID}}">{{blog.title}}</a>
+          </p>
+          <p>{{blog.username}}</p>
+        </div>
+      </div>
+    {{/each}}
+  </div>
 {{/if}}

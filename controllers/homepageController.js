@@ -19,7 +19,6 @@ router.get("/users", async (req, res) => {
     const users = dbUsersData.map((dbUser) => dbUser.get({ plain: true }));
     res.render("users", {
       users,
-      isLoggedInUser: req.session.user || null,
       isLoggedIn: req.session.isLoggedIn,
     });
     console.log(dbUsersData);
@@ -57,6 +56,10 @@ router.get("/blogs", async (req, res) => {
     });
     console.log(dbBlogsData);
     const blogs = dbBlogsData.map((blog) => blog.get({ plain: true }));
+    res.render("blogs", {
+      blogs,
+      isLoggedIn: req.session.isLoggedIn, // blogs: blogs
+    });
   } catch (error) {
     console.log("E L:53 homepagecontroller", error);
     res.status(500).json(error);
