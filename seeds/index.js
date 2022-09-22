@@ -10,8 +10,11 @@ const seedDataBase = async () => {
   await Comment.bulkCreate(comments);
   await Blog.bulkCreate(blogs);
   await User.bulkCreate(users, { individualHooks: true });
+  let allUsers = await User.findAll({
+    attributes: ["userID"],
+  });
   let userindex = 0;
-  for (let i = 0; i < posts.length; i++) {
+  for (let i = 0; i < blogs.length; i++) {
     userindex++;
     if (userindex === allUsers.length) {
       userindex = 0;

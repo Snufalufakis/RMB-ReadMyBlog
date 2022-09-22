@@ -2,8 +2,14 @@
 const router = require("express").Router();
 const apiController = require("./apiController");
 const { Blog, Comment, User } = require("./../models");
-const sequelize = require("sequelize");
 
+const isLoggedIn = (req, res, next) => {
+  if (req.session.isLoggedIn) {
+    next();
+  } else {
+    res.redirect("/");
+  }
+};
 // Router to get the landing page using try catch to handle errors
 router.get("/", (req, res) => {
   res.render("homepage", {
@@ -15,38 +21,25 @@ router.get("/", (req, res) => {
 // render users logged in
 router.get("/users", async (req, res) => {
   console.log(req.session);
+  const isLoggedIn = req.session.isLoggedIn;
+  let currentUsername;
+  if (req.session.user) {
+    currentUsername = req.session.user.username
+      ? req.session.user.username
+      : undefined;
+  }
   try {
     userID = req.session.user.userID;
+    username = req.session.user.username;
     const userData = await User.findByPk(userID, {
       include: [
         {
           model: Blog,
-          attributes: [
-            "blogID",
-            "title",
-            "description",
-            [
-              sequelize.literal(
-                `(SELECT blogID FROM blogs WHERE users.userID = blogs.userID)`
-              ),
-              "blogID",
-            ],
-            [
-              sequelize.literal(
-                `(SELECT title FROM blogs WHERE users.userID = blogs.userID)`
-              ),
-              "title",
-            ],
-            [
-              sequelize.literal(
-                `(SELECT description FROM blogs WHERE users.userID = blogs.userID)`
-              ),
-              "description",
-            ],
-          ],
+          attributes: ["blogID", "title", "description"],
         },
       ],
     });
+
     const user = userData.get({ plain: true });
     console.log(user);
 
@@ -59,24 +52,6 @@ router.get("/users", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
-// const dbBlogsData = await Blog.findAll({
-//   where: {
-//     blogID: req.session.user.id,
-//   },
-// });
-// const blogs = dbBlogsData.map((dbBlog) => dbBlog.get({ plain: true }));
-
-// res.render("users", "blogs", {
-//   users,
-//   blogs,
-//   isLoggedIn: req.session.isLoggedIn,
-// });
-//   console.log(dbUsersData);
-// } catch (error) {
-//   console.log("E L:26 homepagecontroller", error);
-//   res.status(500).json(error);
-// }
 
 router.get("/signup", async (req, res) => {
   res.render("signup");
@@ -117,13 +92,6 @@ router.get("/blogs", async (req, res) => {
   res.render("blogs");
 });
 // if not logged in redirect to home page
-const isLoggedIn = (req, res, next) => {
-  if (req.session.isLoggedIn) {
-    next();
-  } else {
-    res.redirect("/");
-  }
-};
 
 // find all todos for the user using req.session
 router.get("/blogs", async (req, res) => {

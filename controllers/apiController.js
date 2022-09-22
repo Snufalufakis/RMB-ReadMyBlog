@@ -86,6 +86,8 @@ router.post("/signout", (req, res) => {
     req.destroy(() => {
       res.json({ success: true });
     });
+  } else {
+    res.status(404).json({ error: "No user is logged in" });
   }
 });
 

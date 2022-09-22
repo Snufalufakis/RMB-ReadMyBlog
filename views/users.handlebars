@@ -5,7 +5,7 @@
   <div class="activePosts justify-content-center row">
     <div class="my-1 text-center">
     </div>
-    {{#each user.blogID as |blog|}}
+    {{#each blog}}
       <div class="card m-3" style="width: 18rem;">
         <div
           class="bg-opacity-25 bg-secondary card-body rounded-pill text-break text-center"
@@ -13,7 +13,7 @@
           <p class="card-text">
             <a href="/blogs/{{blog.userID}}">{{blog.title}}</a>
           </p>
-          <p>{{blog.username}}</p>
+          <p>{{blog.description}}</p>
         </div>
       </div>
     {{/each}}

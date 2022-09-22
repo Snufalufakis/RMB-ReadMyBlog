@@ -27,9 +27,8 @@
         <div class="my-2 row">
           <div class="col-12 d-flex justify-content-between">
             {{#if isLoggedIn}}
-              <button id="signOut" class="btn btn-secondary col-auto m-1"><i
-                  class="bi bi-door-closed-fill"
-                ></i></button>
+              <button id="signOut" class="btn btn-secondary col-auto m-1">Sign
+                Out</button>
             {{else}}
               <button id="signUpBtn" class="btn btn-secondary col-auto m-1">Sign
                 Up</button>
@@ -47,9 +46,6 @@
     >
     </script>
     <script src="/assets/js/app.js"></script>
-    {{#if isLoggedIn}}
-      <script src="/js/logout.js"></script>
-    {{/if}}
   </body>
 
 </html>

@@ -14,4 +14,9 @@ module.exports = [
     username: "JohnSmith",
     password: "password",
   },
+  {
+    userID: 4,
+    username: "JoeDirt",
+    password: "password",
+  },
 ];

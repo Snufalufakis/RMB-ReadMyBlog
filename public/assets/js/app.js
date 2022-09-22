@@ -1,6 +1,22 @@
 const signInBtn = document.getElementById("signInBtn");
 const userName = document.getElementById("userNameInput");
 const passwordI = document.getElementById("passwordInput");
+const signOut = document.getElementById("signOut");
+
+signOut.addEventListener("click", async (event) => {
+  event.preventDefault();
+  console.log("signing out");
+  try {
+    const res = await fetch("/api/signout", {
+      method: "POST",
+    });
+    await res.json();
+  } catch (error) {
+    console.error(error);
+    alert(error);
+  }
+  window.location.href = "/";
+});
 
 signUpBtn.addEventListener("click", () => {
   window.location.href = "/signup";
