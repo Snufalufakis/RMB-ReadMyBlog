@@ -2,6 +2,7 @@
 const router = require("express").Router();
 const apiController = require("./apiController");
 const { Blog, Comment, User } = require("./../models");
+const sequelize = require("sequelize");
 
 // Router to get the landing page using try catch to handle errors
 router.get("/", (req, res) => {
@@ -15,18 +16,67 @@ router.get("/", (req, res) => {
 router.get("/users", async (req, res) => {
   console.log(req.session);
   try {
-    const dbUsersData = await User.findAll();
-    const users = dbUsersData.map((dbUser) => dbUser.get({ plain: true }));
+    userID = req.session.user.userID;
+    const userData = await User.findByPk(userID, {
+      include: [
+        {
+          model: Blog,
+          attributes: [
+            "blogID",
+            "title",
+            "description",
+            [
+              sequelize.literal(
+                `(SELECT blogID FROM blogs WHERE users.userID = blogs.userID)`
+              ),
+              "blogID",
+            ],
+            [
+              sequelize.literal(
+                `(SELECT title FROM blogs WHERE users.userID = blogs.userID)`
+              ),
+              "title",
+            ],
+            [
+              sequelize.literal(
+                `(SELECT description FROM blogs WHERE users.userID = blogs.userID)`
+              ),
+              "description",
+            ],
+          ],
+        },
+      ],
+    });
+    const user = userData.get({ plain: true });
+    console.log(user);
+
     res.render("users", {
-      users,
+      user,
       isLoggedIn: req.session.isLoggedIn,
     });
-    console.log(dbUsersData);
   } catch (error) {
     console.log("E L:26 homepagecontroller", error);
     res.status(500).json(error);
   }
 });
+
+// const dbBlogsData = await Blog.findAll({
+//   where: {
+//     blogID: req.session.user.id,
+//   },
+// });
+// const blogs = dbBlogsData.map((dbBlog) => dbBlog.get({ plain: true }));
+
+// res.render("users", "blogs", {
+//   users,
+//   blogs,
+//   isLoggedIn: req.session.isLoggedIn,
+// });
+//   console.log(dbUsersData);
+// } catch (error) {
+//   console.log("E L:26 homepagecontroller", error);
+//   res.status(500).json(error);
+// }
 
 router.get("/signup", async (req, res) => {
   res.render("signup");

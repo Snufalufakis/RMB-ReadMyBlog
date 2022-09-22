@@ -12,7 +12,7 @@ User.init(
       defaultValue: DataTypes.UUIDV4,
     },
     username: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(32),
       allowNull: false,
       validate: {
         notNull: true,
