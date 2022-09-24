@@ -31,6 +31,11 @@ Blog.init(
         key: "userID",
       },
     },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "N/A",
+    },
   },
   {
     sequelize,

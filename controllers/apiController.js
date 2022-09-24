@@ -1,94 +1,125 @@
 const bcrypt = require("bcryptjs");
 const router = require("express").Router();
+const { blog } = require("../routes");
 const { User, Blog, Comment } = require("../models");
+const sequelize = require("sequelize");
 
-//Logged in users can post comments on blogs
-router.post("/blogs/:id", async (req, res) => {
+const getBlogs = async (req, res) => {
   try {
-    const dbCommentData = await Comment.create({
-      comment: req.body.comment,
-      userID: req.session.userID,
-      commentID: req.params.commentID,
+    let allBlogs = await Blog.findAll({
+      // Get all blogs
+      attributes: [
+        // Only return these attributes
+        "blogID",
+        "title",
+        "description",
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM comments WHERE blogs.blogID = comments.blogID)`
+          ),
+          "commentCount",
+        ],
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM users WHERE blogs.userID = users.userID)`
+          ),
+          "username",
+        ],
+      ],
     });
-    res.status(200).json(dbCommentData);
+    res.status(200).json(allBlogs); // Return all blogs
   } catch (error) {
-    console.log("E L:16 homepagecontroller", error);
+    console.log(error, "E L: 19 AC");
     res.status(500).json(error);
   }
-});
+};
 
-router.post("/blogs", async (req, res) => {
-  if (!req.session.isLoggedIn) {
-    return res
-      .status(401)
-      .json({ error: " You must be logged in to post a blog" });
-  }
+const getBlogFromID = async (req, res) => {
+  // Get a blog from an ID
   try {
-    const newBlogPost = await Blog.create({
-      blog: req.body.blog,
-      userID: req.session.user.id,
-    });
-    res.json(newBlogPost);
+    let user_blogID = req.params.blogID; // Get the blogID from the URL
+    if (user_blogID) {
+      let blog = await Blog.findOne({
+        // Find the blog
+        attributes: [
+          "blogID",
+          "title",
+          "description",
+          [
+            sequelize.literal(
+              `(SELECT COUNT(*) FROM comments WHERE blogs.blogID = comments.blogID)`
+            ),
+            "commentCount",
+          ],
+          [
+            sequelize.literal(
+              `(SELECT COUNT(*) FROM users WHERE blogs.userID = users.userID)`
+            ),
+            "username",
+          ],
+        ],
+        where: {
+          blogID: user_blogID, // Where the blogID matches the one in the URL
+        },
+      });
+      res.status(200).json(blog);
+    } else {
+      res.status(404).json({ message: "No blog found with that ID" });
+    }
   } catch (error) {
-    console.log("E L 34 apiController");
+    console.log(error, "E L: 63 AC");
     res.status(500).json(error);
   }
-});
+};
 
-router.post("/signup", async (req, res) => {
+const getBlogsFromUser = async (req, res) => {
+  // Get all blogs from a user
   try {
-    const newUser = await User.create(req.body);
-    req.session.save(() => {
-      req.session.user = newUser;
-      req.session.isLoggedIn = true;
-      res.json(newUser);
-    });
-  } catch (error) {
-    console.log("E L48 apiController");
-    res.status(500).json({ error });
-  }
-});
-
-router.post("/signin", async (req, res) => {
-  try {
-    const existingUser = await User.findOne({
-      where: {
-        username: req.body.username,
-      },
-    });
-
-    if (!existingUser) {
-      return res.status(401).json({ error: "Invalid Credentials" });
+    let user_username = req.params.username; // Get the username from the URL
+    if (user_username) {
+      let user = await User.findOne({
+        include: [
+          {
+            model: Blog, // Include the blogs
+            attributes: {
+              include: [
+                [
+                  sequelize.literal(
+                    `(SELECT COUNT(*) FROM comments WHERE blogs.blogID = comments.blogID)`
+                  ),
+                  "commentCount",
+                ],
+                [
+                  sequelize.literal(
+                    `(SELECT COUNT(*) FROM users WHERE blogs.userID = users.userID)`
+                  ),
+                  "username",
+                ],
+              ],
+              exclude: ["userID", "createdAt", "updatedAt"],
+            },
+          },
+        ],
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt", "userID"],
+        },
+        where: {
+          username: user_username, // Where the username matches the one in the URL
+        },
+      });
+      const blog = user.blogs;
+      res.status(200).json(user.blogs);
+    } else {
+      res.status(404).json({ message: "No user found with that username" });
     }
-
-    const doesPasswordMatch = await bcrypt.compare(
-      req.body.password,
-      existingUser.password
-    );
-
-    if (!doesPasswordMatch) {
-      return res.status(401).json({ error: "Invalid Credentials" });
-    }
-
-    req.session.save(() => {
-      req.session.user = existingUser;
-      req.session.isLoggedIn = true;
-      res.json({ success: true });
-    });
   } catch (error) {
-    console.log("E L81 apiController");
-    res.status(500).json({ error });
+    console.log(error, "E L: 116 AC");
+    res.status(500).json(error);
   }
-});
+};
 
-router.post("/signout", (req, res) => {
-  if (req.session.isLoggedIn) {
-    req.destroy(() => {
-      res.json({ success: true });
-    });
-  } else {
-    res.status(404).json({ error: "No user is logged in" });
-  }
-});
-
-module.exports = router;
+module.exports = {
+  getBlogs,
+  getBlogFromID,
+  getBlogsFromUser,
+};
