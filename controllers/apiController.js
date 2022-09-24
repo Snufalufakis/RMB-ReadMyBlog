@@ -185,6 +185,111 @@ const createComment = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  username = req.body.username;
+  try {
+    const user = await User.findOne({
+      // Find the user
+      attributes: ["username"],
+      where: {
+        username: username, // Where the username matches the one in the URL
+      },
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error, "E L: 201 AC");
+    res.status(500).json(error);
+  }
+};
+
+const deleteComment = async (req, res) => {
+  const commentID = req.params.commentID;
+  try {
+    await Comment.destroy({
+      where: {
+        commentID: commentID,
+      },
+    });
+  } catch (e) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};
+
+const deleteBlog = async (req, res) => {
+  const blogID = req.params.postID;
+  try {
+    await Blog.destroy({
+      where: {
+        blogID: blogID,
+      },
+    });
+  } catch (error) {
+    console.error(error, "E L: 229 AC");
+    res.status(500).json({ error });
+  }
+};
+
+const signInUser = async (req, res) => {
+  // Sign in a user
+  try {
+    const existingUser = await User.findOne({
+      where: {
+        username: req.body.username,
+      },
+    });
+
+    if (!existingUser) {
+      return res.status(401).json({ error: "invalid credentials" });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      req.body.password,
+      existingUser.password
+    );
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "invalid credentials" });
+    } else {
+      //console.log('outside saving cookie');
+      req.session.save(() => {
+        //console.log("saving user to cookie");
+        req.session.user = existingUser;
+        req.session.isLoggedIn = true;
+        res.json({ success: true });
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};
+
+const signOutUser = async (req, res) => {
+  // Sign out a user
+  if (req.session.isLoggedIn) {
+    req.session.destroy(() => {
+      res.json({ success: true });
+    });
+  }
+};
+
+const signUpUser = async (req, res) => {
+  // Create a new user
+  try {
+    const newUser = await User.create(req.body);
+
+    req.session.save(() => {
+      req.session.user = newUser;
+      req.session.isLoggedIn = true;
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};
+
 module.exports = {
   getBlogs,
   getBlogFromID,
@@ -192,4 +297,10 @@ module.exports = {
   getCommentsFromBlog,
   createBlog,
   createComment,
+  getUser,
+  deleteComment,
+  deleteBlog,
+  signInUser,
+  signOutUser,
+  signUpUser,
 };
