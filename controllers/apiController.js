@@ -118,8 +118,78 @@ const getBlogsFromUser = async (req, res) => {
   }
 };
 
+const getCommentsFromBlog = async (req, res) => {
+  try {
+    let user_blogID = req.params.blogID; // Get the blogID from the URL
+    if (user_blogID) {
+      const comments = await Comment.findAll({
+        attributes: ["commentID", "comment"],
+        include: [
+          {
+            model: User,
+            attributes: {
+              exclude: ["password", "userID", "createdAt", "updatedAt"],
+            },
+          },
+        ],
+        where: {
+          blogID: user_blogID, // Where the blogID matches the one in the URL
+        },
+      });
+      res.status(200).json(comments);
+    } else {
+      res.status(404).json({ message: "No blog found with that ID" });
+    }
+  } catch (error) {
+    console.log(error, "E L: 144 AC");
+    res.status(500).json(error);
+  }
+};
+
+const createBlog = async (req, res) => {
+  // Create a blog
+  try {
+    let newBlog;
+    if (req.body.title && req.body.description) {
+      // If the title and description are provided
+      newBlog = await Blog.create({
+        title: req.body.title,
+        description: req.body.description,
+        userID: req.session.user.userID,
+      });
+    }
+    res.status(200).json(newBlog);
+  } catch (error) {
+    console.log(error, "E L: 164 AC");
+    res.status(500).json(error);
+  }
+};
+
+const createComment = async (req, res) => {
+  // Create a comment
+  try {
+    // If the comment and blogID are provided
+    const comment = req.body.comment;
+    const blogID = req.body.blogID;
+    const userID = req.session.user.userID;
+    if (userID === undefined) {
+      res.status(401).json({ message: "You must be logged in to comment" });
+    } else {
+      const newComment = { comment: comment, blogID: blogID, userID: userID }; // Create the comment
+      await Comment.create(newComment);
+      res.status(200).json(newComment);
+    }
+  } catch {
+    console.log(error, "E L: 175 AC");
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   getBlogs,
   getBlogFromID,
   getBlogsFromUser,
+  getCommentsFromBlog,
+  createBlog,
+  createComment,
 };
