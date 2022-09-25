@@ -79,8 +79,8 @@ THEN I am able to view comments but I am prompted to log in again before I can a
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [Github](https://github.com/Snufalufakis/RMB-ReadMyBlog)
+- Live Site URL: [Heroku](https://readmyblog.herokuapp.com/)
 
 ## My process
 
