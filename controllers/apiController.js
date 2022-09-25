@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
-const router = require("express").Router();
-const { blog } = require("../routes");
+
 const { User, Blog, Comment } = require("../models");
 const sequelize = require("sequelize");
 
@@ -217,7 +216,7 @@ const deleteComment = async (req, res) => {
 };
 
 const deleteBlog = async (req, res) => {
-  const blogID = req.params.postID;
+  const blogID = req.params.blogID;
   try {
     await Blog.destroy({
       where: {
@@ -230,7 +229,8 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-const signInUser = async (req, res) => {
+const signInUser = async function (req, res) {
+  console.log(" dumbass");
   // Sign in a user
   try {
     const existingUser = await User.findOne({
@@ -260,7 +260,7 @@ const signInUser = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    console.error(error, " E L 262");
     res.status(500).json({ error });
   }
 };

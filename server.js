@@ -6,7 +6,7 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const sequelize = require("./config/connections");
-const routes = require("./controllers/homepageController");
+const routes = require("./routes");
 
 const helpers = require("./utils/helpers");
 
@@ -41,5 +41,6 @@ app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
   // data base logs
+  console.log(PORT, " port");
   app.listen(PORT, () => console.log("WE MADE IT!!! ")); // console log to make server running
 });

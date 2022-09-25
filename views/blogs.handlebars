@@ -3,16 +3,42 @@
     <div class="col-lg-4 col-md-12 mb-4">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{blog.title}} Title should be here</h5>
+          <h5 class="card-title">{{blog.title}}</h5>
           <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.{{blog.description}}
+            {{blog.description}}
           </p>
-          {{#if isLoggedIn}}
-            <a href="#!" class="btn btn-primary">Comment</a>
+        </div>
+        <div id="comment-section" class="justify-content-center row">
+          {{#if signedIn}}
+            <div class="col-7">
+              <input
+                type="text"
+                id="comment-input"
+                class="form-control input-group-text text-break text-wrap"
+                placeholder="Leave a comment"
+              />
+              <br />
+              <button
+                id="comment-button"
+                class="btn btn-dark col-12"
+              >Submit</button>
+            </div>
           {{/if}}
+          <div
+            id="comments"
+            class="bg-light border border-dark col-7 justify-content-center m-3 rounded-5 row text-break"
+          >
+            {{#each comments as |comment|}}
+              <div class="border border-dark col-7 text-wrap">
+                <p>{{comment.user.username}}</p>
+                <p>{{comment.comment}}</p>
+              </div>
+            {{/each}}
+          </div>
         </div>
       </div>
     </div>
   {{/each}}
 </div>
+
+<script src="/assets/js/blog.js"></script>

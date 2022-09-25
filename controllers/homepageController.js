@@ -97,11 +97,82 @@ const getBlogPage = async (req, res) => {
   });
 };
 
+const getUserPage = async (req, res) => {
+  const signedIn = req.session.isLoggedIn;
+  let currentUsername;
+  if (req.session.user) {
+    currentUsername = req.session.user.username
+      ? req.session.user.username
+      : undefined;
+  }
+
+  const username = req.params.username;
+  const userData = await User.findOne({
+    attributes: ["userID", "username"],
+    where: {
+      username: username,
+    },
+  });
+  const user = userData.get({ plain: true });
+  const blogsData = await Blog.findAll({
+    attributes: [
+      "blogID",
+      "title",
+      "description",
+
+      [
+        sequelize.literal(
+          `(SELECT COUNT(*) FROM comments WHERE blogs.blogID = comments.blogID)`
+        ),
+        "comment_count",
+      ],
+      [
+        sequelize.literal(
+          `(SELECT username FROM users WHERE blogs.userID = users.userID)`
+        ),
+        "username",
+      ],
+    ],
+    where: {
+      userID: user.userID,
+    },
+  });
+  const blogs = blogsData.map((blog) => blog.get({ plain: true }));
+
+  res.render("users", {
+    signedIn,
+    blogs,
+    user,
+    currentUsername,
+  });
+};
+
+const getCreateBlogPage = function (req, res) {
+  const signedIn = req.session.isLoggedIn;
+  let currentUsername;
+  if (req.session.user) {
+    currentUsername = req.session.user.username
+      ? req.session.user.username
+      : undefined;
+  }
+
+  if (signedIn === undefined || signedIn === false) {
+    return res.status(400).json("you need to be signed in");
+  } else {
+    res.render("createBlog", {
+      signedIn,
+      currentUsername,
+    });
+  }
+};
+
 module.exports = {
   getHomePage,
   getSignInPage,
   getSignUpPage,
   getBlogPage,
+  getUserPage,
+  getCreateBlogPage,
 };
 
 /*

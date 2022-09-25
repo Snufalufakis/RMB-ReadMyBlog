@@ -1,0 +1,13 @@
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        {{#each blogs as |blog|}}
+        <div class="card m-3 bg-gradient justify-content-center" style="width: 18rem;">
+            <div class="bg-opacity-25 bg-secondary card-body rounded-pill text-break text-center">
+                <p class="card-text">
+                    <a href="/blogs/{{blog.blogID}}">{{blog.title}}</a>
+                </p>
+                <p class="card-text"><a href="/users/{{blog.username}}">{{blog.username}}</a></p>
+            </div>
+        </div>
+        {{/each}}
+    </div>

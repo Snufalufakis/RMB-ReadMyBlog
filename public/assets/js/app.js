@@ -1,13 +1,12 @@
-const signInBtn = document.getElementById("signInBtn");
-const userName = document.getElementById("userNameInput");
-const passwordI = document.getElementById("passwordInput");
-const signOut = document.getElementById("signOut");
+const signIn = document.getElementById("sign-in-button-header");
+const signOut = document.getElementById("sign-out-button-header");
+const signUp = document.getElementById("sign-up-button-header");
 
-signOut.addEventListener("click", async (event) => {
+const signOutUser = async (event) => {
   event.preventDefault();
   console.log("signing out");
   try {
-    const res = await fetch("/api/signout", {
+    const res = await fetch("/api/users/signout", {
       method: "POST",
     });
     await res.json();
@@ -15,34 +14,19 @@ signOut.addEventListener("click", async (event) => {
     console.error(error);
     alert(error);
   }
-  window.location.href = "/";
-});
+  window.location.href = "/signin";
+};
 
-signUpBtn.addEventListener("click", () => {
-  window.location.href = "/signup";
-  console.log("signing up");
-});
-
-signInBtn.addEventListener("click", async (event) => {
+const goToSignInPage = (event) => {
   event.preventDefault();
-  console.log("signing in");
-  const username = userName.value;
-  const password = passwordI.value;
-  try {
-    const response = await fetch("/api/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    });
-    const user = await response.json();
-    console.log(user);
-    window.location.href = "/blogs";
-  } catch (error) {
-    alert(error);
-  }
-});
+  window.location.href = "/signin";
+};
+
+const goToSignUpPage = (event) => {
+  event.preventDefault();
+  window.location.href = "/signup";
+};
+
+signOut?.addEventListener("click", signOutUser);
+signIn?.addEventListener("click", goToSignInPage);
+signUp?.addEventListener("click", goToSignUpPage);
