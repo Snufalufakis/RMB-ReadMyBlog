@@ -30,7 +30,7 @@ signUpBtn.addEventListener("click", async (event) => {
 
     const user = await response.json();
     console.log(user);
-    window.location.href = "blogs";
+    window.location.href = "/";
   } catch (error) {
     alert(error);
   }
