@@ -31,9 +31,11 @@ const signInUser = async (e) => {
         password,
       }),
     });
-    console.log(await response, " Here!!!!");
-    if (response.success) {
-      const responseData = await response.json();
+    console.log(response, " Here!!!!");
+    const responseData = response.json();
+    console.log(responseData);
+    // debugger;
+    if (response.status == 200) {
       window.location.href = "/";
     } else {
       alert("Please enter correct username and password");

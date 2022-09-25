@@ -29,7 +29,7 @@ const getHomePage = async function (req, res) {
     ],
   });
   const blogs = blogsData.map((blog) => blog.get({ plain: true }));
-  res.render("content", {
+  res.render("blogs", {
     blogs,
     signedIn,
     currentUsername,
@@ -89,7 +89,7 @@ const getBlogPage = async (req, res) => {
   const comments = commentQuery.map((comment) => comment.get({ plain: true }));
   console.log(comments);
 
-  res.render("blog", {
+  res.render("blogs", {
     blog,
     comments,
     signedIn,

@@ -17,7 +17,7 @@ signUpBtn.addEventListener("click", async (event) => {
   }
 
   try {
-    const response = await fetch("/api/signup", {
+    const response = await fetch("/api/users/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ signUpBtn.addEventListener("click", async (event) => {
 
     const user = await response.json();
     console.log(user);
-    window.location.href = "/blogs";
+    window.location.href = "blogs";
   } catch (error) {
     alert(error);
   }

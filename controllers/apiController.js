@@ -231,6 +231,7 @@ const deleteBlog = async (req, res) => {
 
 const signInUser = async function (req, res) {
   console.log(" dumbass");
+
   // Sign in a user
   try {
     const existingUser = await User.findOne({
@@ -238,7 +239,7 @@ const signInUser = async function (req, res) {
         username: req.body.username,
       },
     });
-
+    console.log("ya almost goit it");
     if (!existingUser) {
       return res.status(401).json({ error: "invalid credentials" });
     }
@@ -251,9 +252,12 @@ const signInUser = async function (req, res) {
     if (!passwordMatch) {
       return res.status(401).json({ error: "invalid credentials" });
     } else {
-      //console.log('outside saving cookie');
-      req.session.save(() => {
-        //console.log("saving user to cookie");
+      console.log("outside saving cookie");
+      req.session.save((err) => {
+        console.log("saving user to cookie");
+        if (err) {
+          return err;
+        }
         req.session.user = existingUser;
         req.session.isLoggedIn = true;
         res.json({ success: true });
@@ -263,6 +267,7 @@ const signInUser = async function (req, res) {
     console.error(error, " E L 262");
     res.status(500).json({ error });
   }
+  console.log("maybe we work");
 };
 
 const signOutUser = async (req, res) => {
